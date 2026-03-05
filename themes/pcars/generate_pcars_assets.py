@@ -1824,52 +1824,60 @@ def gen_misc():
     d.polygon([(2*s, 9*s), (16*s, 2*s), (16*s, 16*s)], fill=_c(SOFT_W))
     save(ss_finish(img, 20, 18), "payloads_dashboard/arrow.png")
 
-    # Launch animation frames — power cell charging cycle
+    # Launch animation frames — plasma ball (same size both frames)
     import math as _math
-    for fi, (name, w, h) in enumerate([("animation/anim_frame_1", 113, 106),
-                                        ("animation/anim_frame_2", 97, 105)]):
+    import random as _rand
+    PLASMA_GREEN = (0, 220, 80)
+    PLASMA_GREEN_DIM = (0, 160, 50)
+    for fi, name in enumerate(["animation/anim_frame_1", "animation/anim_frame_2"]):
+        w, h = 113, 106  # fixed size — no shrinking between frames
         img, d = ss_start(w, h)
         cx, cy = w * s // 2, h * s // 2
         r_outer = min(w, h) * s // 2 - 4 * s
 
-        # Outer ring
+        # Outer ring — green
         d.ellipse([cx - r_outer, cy - r_outer, cx + r_outer, cy + r_outer],
-                  outline=_c(WHITE, 200), width=2 * s)
+                  outline=_c(PLASMA_GREEN, 200), width=2 * s)
+        # Inner glow ring
+        r_glow = r_outer - 3 * s
+        d.ellipse([cx - r_glow, cy - r_glow, cx + r_glow, cy + r_glow],
+                  outline=_c(PLASMA_GREEN, 40), width=2 * s)
 
-        # Inner curved segments — 6 arcs forming the power cell pattern
-        r_inner = int(r_outer * 0.72)
-        seg_angles = [(0, 50), (60, 110), (120, 170), (180, 230), (240, 290), (300, 350)]
+        # 6 lightning bolts — plasma ball style, shift angles per frame
+        rng = _rand.Random(77 + fi * 31)
+        bolt_base_angles = [0, 60, 120, 180, 240, 300]
+        for bi, base_deg in enumerate(bolt_base_angles):
+            # Each bolt gets a random offset per frame so they "move"
+            angle_deg = base_deg + rng.uniform(-25, 25)
+            ba = _math.radians(angle_deg)
 
-        # Alternate which segments are bright vs dim per frame
-        for si, (a_start, a_end) in enumerate(seg_angles):
-            lit = (si + fi) % 2 == 0
-            alpha = 220 if lit else 60
-            d.arc([cx - r_inner, cy - r_inner, cx + r_inner, cy + r_inner],
-                  start=a_start, end=a_end,
-                  fill=_c(WHITE, alpha), width=3 * s)
+            # Bolt goes from near center to near edge
+            r_start = int(r_outer * 0.08)
+            r_end = int(r_outer * 0.85)
 
-        # Lightning bolts from center — shift position per frame
-        bolt_angles = [_math.radians(30 + fi * 30), _math.radians(150 + fi * 30), _math.radians(270 + fi * 30)]
-        for ba in bolt_angles:
-            r1 = int(r_inner * 0.25)
-            r2 = int(r_inner * 0.65)
-            x1 = int(cx + r1 * _math.cos(ba))
-            y1 = int(cy + r1 * _math.sin(ba))
-            # Zigzag bolt
-            mid_r = (r1 + r2) // 2
-            jog = 4 * s * (1 if fi == 0 else -1)
-            xm = int(cx + mid_r * _math.cos(ba)) + jog
-            ym = int(cy + mid_r * _math.sin(ba))
-            x2 = int(cx + r2 * _math.cos(ba))
-            y2 = int(cy + r2 * _math.sin(ba))
-            d.line([(x1, y1), (xm, ym), (x2, y2)],
-                   fill=_c(WHITE, 180), width=2 * s)
+            # 3-segment zigzag bolt
+            pts = []
+            for seg in range(4):
+                t = seg / 3.0
+                r_at = r_start + (r_end - r_start) * t
+                # Jitter perpendicular to the bolt direction
+                jitter = 0 if seg == 0 or seg == 3 else rng.uniform(-8, 8) * s
+                bx = int(cx + r_at * _math.cos(ba) + jitter * _math.cos(ba + 1.57))
+                by = int(cy + r_at * _math.sin(ba) + jitter * _math.sin(ba + 1.57))
+                pts.append((bx, by))
 
-        # Center dot — power core
-        cr = 4 * s
-        core_alpha = 255 if fi == 0 else 140
+            # Draw bolt with glow
+            d.line(pts, fill=_c(PLASMA_GREEN, 220), width=2 * s, joint="curve")
+            # Bright core line
+            d.line(pts, fill=_c((150, 255, 180), 140), width=1 * s, joint="curve")
+
+        # Center dot — bright green core
+        cr = 5 * s
         d.ellipse([cx - cr, cy - cr, cx + cr, cy + cr],
-                  fill=_c(WHITE, core_alpha))
+                  fill=_c(PLASMA_GREEN, 240))
+        cr2 = 2 * s
+        d.ellipse([cx - cr2, cy - cr2, cx + cr2, cy + cr2],
+                  fill=_c((200, 255, 220), 255))
 
         result = ss_finish(img, w, h)
         save(result, f"launch_payload_dialog/{name}.png")
