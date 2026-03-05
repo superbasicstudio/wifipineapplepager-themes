@@ -145,7 +145,7 @@
     "payload_title": "components/templates/payload_title.json",
     "list_count": "components/templates/list_count.json",
     "list_page_total": "components/templates/list_page_total.json",
-    "list_page_current": "components/templates/list_page_total.json",
+    "list_page_current": "components/templates/list_page_current.json",
     "list_pagination_label": "components/templates/list_pagination_label.json"
   },
 
