@@ -553,7 +553,7 @@ def gen_dashboard():
     result = ss_finish(img, pw, ph)
     save(result, "dashboard/pineap.png")
 
-    # Settings Icon — Starfleet combadge (chevron arrowhead over oval)
+    # Settings Icon — combadge (chevron arrowhead over oval)
     rw, rh = ICON_SIZE, ICON_SIZE
     img, d = ss_start(rw, rh)
     wc = _c((255, 255, 255), 255)
