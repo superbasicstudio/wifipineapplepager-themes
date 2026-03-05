@@ -31,7 +31,7 @@ A dark, utilitarian theme for the WiFi Pineapple Pager. Class 9 probe aesthetics
 
 ## Description
 
-Inspired by the bridge consoles of a certain Galaxy-class starship — dark structural frames on near-black backgrounds, with surgical accent lighting that would make any chief engineer proud. Each section runs its own color frequency: red alert for threats, amber for tactical operations, green for long-range scanning, magenta for subspace interference, and cool blue for ship's systems. The LCARS-adjacent layout puts everything within reach without cluttering the viewscreen.
+Inspired by the bridge consoles of a certain Galaxy-class starship — dark structural frames on near-black backgrounds, with surgical accent lighting that would make any chief engineer proud. Each section runs its own color frequency: red alert for threats, amber for tactical operations, green for long-range scanning, magenta for subspace interference, and cool blue for ship's systems. The PCARS layout puts everything within reach without cluttering the viewscreen.
 
 All 187 assets are programmatically generated at 3x resolution and downscaled with LANCZOS anti-aliasing — because if you're going to replicate something at the molecular level, you want clean transporter patterns.
 

@@ -7,7 +7,7 @@ Pineapple Computer Access Retrieval System
 Dark steel-blue structural frame, near-black content areas, surgical accent colors.
 Supersampled rendering at 3x with LANCZOS downscale for clean anti-aliased edges.
 
-Usage: python3 generate_lcars_assets.py
+Usage: python3 generate_pcars_assets.py
 """
 
 import os
@@ -245,7 +245,7 @@ def pcars_frame_bg(w, h, top_h=26, **_kwargs):
 
 def pcars_section_bg(w, h, section_color, section_dark=None, top_h=26,
                      sidebar_w=6, bottom_h=4):
-    """LCARS section background with colored structural identity.
+    """PCARS section background with colored structural identity.
 
     Each section gets three identifying elements:
     1. Left edge bar — sidebar_w px wide, section accent color, full content height
@@ -267,7 +267,7 @@ def pcars_section_bg(w, h, section_color, section_dark=None, top_h=26,
     d.rectangle([0, (top_h - 1) * s, w * s, top_h * s],
                 fill=_c(section_color, 50))
 
-    # Left sidebar bar — LCARS structural accent
+    # Left sidebar bar — PCARS structural accent
     bar_top = top_h * s
     bar_bot = (h - bottom_h) * s
     bar_right = sidebar_w * s
@@ -1431,7 +1431,7 @@ def gen_recon():
 # ─── Full-Screen Backgrounds ────────────────────────────────────────────────
 
 def gen_backgrounds():
-    """Per-section LCARS backgrounds with color identity + remaining screens."""
+    """Per-section PCARS backgrounds with color identity + remaining screens."""
     import random
     random.seed(99)
     W, H = 480, 222
@@ -1442,7 +1442,7 @@ def gen_backgrounds():
         return ss_finish(img, W, H)
 
     def section(color, dark=None):
-        """Section-specific LCARS background with colored structural identity."""
+        """Section-specific PCARS background with colored structural identity."""
         return ss_finish(pcars_section_bg(W, H, color, dark), W, H)
 
     # ── Watermark helper — composites faint tinted icon onto background ──
@@ -1492,7 +1492,7 @@ def gen_backgrounds():
         bg_img.paste(colored, (sx, sy), colored)
         return bg_img
 
-    # ── Section backgrounds — each with unique LCARS identity + watermark icon ──
+    # ── Section backgrounds — each with unique PCARS identity + watermark icon ──
     bg = section(SEC_SETTINGS, SEC_SETTINGS_D)
     save(watermark(bg, "settings", SEC_SETTINGS, alpha=5, overlay=False), "settings_bg.png")
 
@@ -1626,7 +1626,7 @@ def gen_misc():
         d.rounded_rectangle([4*s, 0, 8*s, 159*s], radius=2*s, fill=_c(color))
         save(ss_finish(img, 13, 160), f"{name}.png")
 
-    # Section-colored dividers (13x160) — LCARS identity for two-column menus
+    # Section-colored dividers (13x160) — PCARS identity for two-column menus
     section_divs = {
         'settings': (SEC_SETTINGS_D, tuple(min(c + 20, 255) for c in SEC_SETTINGS_D)),
         'pineap':   (SEC_PINEAP_D,  tuple(min(c + 20, 255) for c in SEC_PINEAP_D)),
