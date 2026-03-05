@@ -1535,7 +1535,7 @@ def gen_backgrounds():
     d.rectangle([0, 2*s, W*s, 4*s], fill=_c(EDGE, 50))
     d.rectangle([0, (H-4)*s, W*s, H*s], fill=_c(FRAME_D))
     # Lock icon — blue edge glow outline on black
-    d.arc([215*s, 68*s, 265*s, 108*s], 0, 180, fill=_c(EDGE), width=3*s)
+    d.arc([215*s, 68*s, 265*s, 108*s], 180, 360, fill=_c(EDGE), width=3*s)
     d.line([(215*s, 88*s), (215*s, 106*s)], fill=_c(EDGE), width=3*s)
     d.line([(265*s, 88*s), (265*s, 106*s)], fill=_c(EDGE), width=3*s)
     rrect(d, (205, 105, 275, 155), fill=EDGE, radius=3)
@@ -1565,8 +1565,8 @@ def gen_backgrounds():
         d.rectangle([0, (H-5)*s, W*s, H*s], fill=_c(accent))
         d.polygon([(240*s, 50*s), (310*s, 170*s), (170*s, 170*s)],
                   outline=_c(accent), fill=_c(accent, 20))
-        d.line([(240*s, 80*s), (240*s, 135*s)], fill=_c(accent), width=3*s)
-        d.ellipse([236*s, 145*s, 244*s, 153*s], fill=_c(accent))
+        d.line([(240*s, 80*s), (240*s, 135*s)], fill=_c(BG), width=4*s)
+        d.ellipse([235*s, 143*s, 245*s, 153*s], fill=_c(BG))
         save(ss_finish(img, W, H), f"{name}.png")
 
     # Battery alerts
