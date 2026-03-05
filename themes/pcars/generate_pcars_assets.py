@@ -1824,45 +1824,53 @@ def gen_misc():
     d.polygon([(2*s, 9*s), (16*s, 2*s), (16*s, 16*s)], fill=_c(SOFT_W))
     save(ss_finish(img, 20, 18), "payloads_dashboard/arrow.png")
 
-    # Launch animation frames — tribble!
+    # Launch animation frames — power cell charging cycle
+    import math as _math
     for fi, (name, w, h) in enumerate([("animation/anim_frame_1", 113, 106),
                                         ("animation/anim_frame_2", 97, 105)]):
         img, d = ss_start(w, h)
-        cx, cy = w * s // 2, h * s // 2 + 5 * s
-        # Body — fuzzy round blob
-        body_rx, body_ry = 30 * s, 24 * s
-        d.ellipse([cx - body_rx, cy - body_ry, cx + body_rx, cy + body_ry],
-                  fill=_c((90, 65, 45)))
-        # Fur texture — random-ish arcs and lines radiating out
-        import random
-        rng = random.Random(42 + fi)
-        for _ in range(60):
-            angle = rng.uniform(0, 2 * 3.14159)
-            length = rng.uniform(8, 20) * s
-            r_off = rng.uniform(0.6, 1.0)
-            sx2 = int(cx + body_rx * r_off * 0.9 * math.cos(angle))
-            sy2 = int(cy + body_ry * r_off * 0.9 * math.sin(angle))
-            ex = int(sx2 + length * math.cos(angle))
-            ey = int(sy2 + length * math.sin(angle))
-            shade = rng.randint(60, 100)
-            d.line([(sx2, sy2), (ex, ey)],
-                   fill=_c((shade, shade - 20, shade - 35), 180), width=s)
-        # Highlight fluff on top
-        d.ellipse([cx - 20*s, cy - body_ry + 2*s, cx + 20*s, cy - body_ry + 16*s],
-                  fill=_c((115, 85, 60)))
-        # Eyes — two small dots
-        eye_y = cy - 8 * s
-        for ex_off in [-10, 10]:
-            ex2 = cx + ex_off * s
-            d.ellipse([ex2 - 3*s, eye_y - 3*s, ex2 + 3*s, eye_y + 3*s],
-                      fill=_c(WHITE))
-            d.ellipse([ex2 - 1*s, eye_y - 1*s, ex2 + 1*s, eye_y + 1*s],
-                      fill=_c(BG))
-        # Frame 2: slightly squished (breathing)
-        if fi == 1:
-            d.ellipse([cx - body_rx - 3*s, cy + body_ry - 4*s,
-                       cx + body_rx + 3*s, cy + body_ry + 4*s],
-                      fill=_c((80, 55, 38)))
+        cx, cy = w * s // 2, h * s // 2
+        r_outer = min(w, h) * s // 2 - 4 * s
+
+        # Outer ring
+        d.ellipse([cx - r_outer, cy - r_outer, cx + r_outer, cy + r_outer],
+                  outline=_c(WHITE, 200), width=2 * s)
+
+        # Inner curved segments — 6 arcs forming the power cell pattern
+        r_inner = int(r_outer * 0.72)
+        seg_angles = [(0, 50), (60, 110), (120, 170), (180, 230), (240, 290), (300, 350)]
+
+        # Alternate which segments are bright vs dim per frame
+        for si, (a_start, a_end) in enumerate(seg_angles):
+            lit = (si + fi) % 2 == 0
+            alpha = 220 if lit else 60
+            d.arc([cx - r_inner, cy - r_inner, cx + r_inner, cy + r_inner],
+                  start=a_start, end=a_end,
+                  fill=_c(WHITE, alpha), width=3 * s)
+
+        # Lightning bolts from center — shift position per frame
+        bolt_angles = [_math.radians(30 + fi * 30), _math.radians(150 + fi * 30), _math.radians(270 + fi * 30)]
+        for ba in bolt_angles:
+            r1 = int(r_inner * 0.25)
+            r2 = int(r_inner * 0.65)
+            x1 = int(cx + r1 * _math.cos(ba))
+            y1 = int(cy + r1 * _math.sin(ba))
+            # Zigzag bolt
+            mid_r = (r1 + r2) // 2
+            jog = 4 * s * (1 if fi == 0 else -1)
+            xm = int(cx + mid_r * _math.cos(ba)) + jog
+            ym = int(cy + mid_r * _math.sin(ba))
+            x2 = int(cx + r2 * _math.cos(ba))
+            y2 = int(cy + r2 * _math.sin(ba))
+            d.line([(x1, y1), (xm, ym), (x2, y2)],
+                   fill=_c(WHITE, 180), width=2 * s)
+
+        # Center dot — power core
+        cr = 4 * s
+        core_alpha = 255 if fi == 0 else 140
+        d.ellipse([cx - cr, cy - cr, cx + cr, cy + cr],
+                  fill=_c(WHITE, core_alpha))
+
         result = ss_finish(img, w, h)
         save(result, f"launch_payload_dialog/{name}.png")
 
