@@ -2,9 +2,25 @@
 
 **Pineapple Computer Access Retrieval System**
 
-<img src="screenshot.jpeg" width="480">
+<img src="screenshots/mockup_dashboard_recon.png" width="600">
 
 A dark, utilitarian theme for the WiFi Pineapple Pager. Class 9 probe aesthetics meets duotronic interface design — built for away missions where stealth matters more than style.
+
+## Screenshots
+
+### Dashboard — All Five Stations
+
+<img src="screenshots/pcars_dashboards.png" width="800">
+
+### Full Theme Overview
+
+<img src="screenshots/pcars_grid.png" width="800">
+
+### On Device
+
+| Alerts | Payloads | Recon |
+|--------|----------|-------|
+| <img src="screenshots/mockup_dashboard_alerts.png" width="260"> | <img src="screenshots/mockup_dashboard_payloads.png" width="260"> | <img src="screenshots/mockup_dashboard_recon.png" width="260"> |
 
 ## Author
 
@@ -17,15 +33,15 @@ A dark, utilitarian theme for the WiFi Pineapple Pager. Class 9 probe aesthetics
 
 Inspired by the bridge consoles of a certain Galaxy-class starship — dark structural frames on near-black backgrounds, with surgical accent lighting that would make any chief engineer proud. Each section runs its own color frequency: red alert for threats, amber for tactical operations, green for long-range scanning, magenta for subspace interference, and cool blue for ship's systems. The LCARS-adjacent layout puts everything within reach without cluttering the viewscreen.
 
-All 156 assets are programmatically generated at 3x resolution and downscaled with LANCZOS anti-aliasing — because if you're going to replicate something at the molecular level, you want clean transporter patterns.
+All 187 assets are programmatically generated at 3x resolution and downscaled with LANCZOS anti-aliasing — because if you're going to replicate something at the molecular level, you want clean transporter patterns.
 
 ## Design Specs
 
 - **Hull plating:** Deep navy-black (#040610) — minimal EM signature
 - **Structural ribs:** Dark navy-blue bars with bright blue edge illumination
 - **Deflector accents:** Electric blue edge glow on all frame elements
-- **Targeting lock:** Cyan highlight on selected elements
-- **Deck color coding:** Red (alerts), amber (payloads), green (recon), magenta (PineAP), blue (settings) — each section operates on its own frequency
+- **Targeting lock:** White highlight on selected elements, section accent on dashboards
+- **Deck color coding:** Red (alerts), amber (payloads), green (recon), purple (PineAP), blue (settings) — each section operates on its own frequency
 - **Bridge layout:** Horizontal-arc dashboard — all five stations visible at once
 - **Bulkhead consistency:** Uniform framing across all 113 component screens
 
@@ -45,7 +61,7 @@ Or beam it over via the Pager web UI theme manager.
 
 ## Replicator Protocol
 
-The `generate_pcars_assets.py` script regenerates all 156 PNG assets from source parameters using Python + Pillow. Not deployed to the device — runs on your workstation.
+The `generate_pcars_assets.py` script regenerates all 187 PNG assets from source parameters using Python + Pillow. Not deployed to the device — runs on your workstation.
 
 ```
 pip install Pillow
