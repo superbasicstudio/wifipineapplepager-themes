@@ -79,3 +79,5 @@ Useful for modifying the color palette, adjusting layouts, or creating variant t
 
 Community theme for the Hak5 WiFi Pineapple Pager.
 Subject to the [Hak5 Software License Agreement](https://hak5.org/license).
+
+![](https://analytics.superbasic.studio/p/PdggxrZH1)
