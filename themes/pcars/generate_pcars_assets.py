@@ -117,6 +117,97 @@ def ss_finish(img, w, h):
     return img.resize((w, h), Image.LANCZOS)
 
 
+def _draw_organic_plasma(w, h, seed=42, color=(255, 255, 255)):
+    """Draw an organic plasma ball with irregular lightning arcs.
+
+    Returns a w x h RGBA image (already downsampled from supersample).
+    """
+    import random as _rand
+    rng = _rand.Random(seed)
+
+    ws, hs = w * SS, h * SS
+    img = Image.new("RGBA", (ws, hs), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    cx, cy = ws // 2, hs // 2
+    r_outer = min(ws, hs) // 2 - 4 * SS
+
+    # Outer ring with slight organic wobble
+    for i in range(3):
+        ox = rng.randint(-SS // 2, SS // 2)
+        oy = rng.randint(-SS // 2, SS // 2)
+        d.ellipse([cx - r_outer + ox, cy - r_outer + oy,
+                    cx + r_outer + ox, cy + r_outer + oy],
+                  outline=_c(color, 160 + i * 30), width=2 * SS)
+
+    # Inner glow ring
+    r_glow = r_outer - 3 * SS
+    d.ellipse([cx - r_glow, cy - r_glow, cx + r_glow, cy + r_glow],
+              outline=_c(color, 40), width=2 * SS)
+
+    # 4-6 bolts at irregular angles
+    num_bolts = rng.randint(4, 6)
+    angles = []
+    angle = rng.uniform(0, 360)
+    for _ in range(num_bolts):
+        angles.append(angle)
+        angle += rng.uniform(35, 120)
+
+    for bolt_deg in angles:
+        ba = math.radians(bolt_deg)
+        r_start = int(r_outer * rng.uniform(0.05, 0.12))
+        r_end = int(r_outer * rng.uniform(0.60, 0.92))
+
+        # 5-8 zigzag segments
+        num_segs = rng.randint(5, 8)
+        pts = []
+        for seg in range(num_segs + 1):
+            t = seg / num_segs
+            r_at = r_start + (r_end - r_start) * t
+            if seg == 0:
+                jitter = 0
+            else:
+                max_jitter = 6 * SS * t * rng.uniform(0.3, 2.0)
+                jitter = rng.uniform(-max_jitter, max_jitter)
+            angle_wobble = rng.uniform(-0.15, 0.15) if seg > 0 else 0
+            a = ba + angle_wobble
+            bx = int(cx + r_at * math.cos(a) + jitter * math.cos(a + 1.57))
+            by = int(cy + r_at * math.sin(a) + jitter * math.sin(a + 1.57))
+            pts.append((bx, by))
+
+        thickness = rng.choice([1, 2, 2, 3]) * SS
+        # Glow
+        d.line(pts, fill=_c(color, 60), width=thickness + 2 * SS, joint="curve")
+        # Main bolt
+        d.line(pts, fill=_c(color, 200), width=thickness, joint="curve")
+        # Bright core
+        if thickness > SS:
+            d.line(pts, fill=_c(color, 255), width=max(SS, thickness - SS), joint="curve")
+
+        # Fork branch — 40% chance
+        if rng.random() < 0.4 and len(pts) > 3:
+            fork_idx = rng.randint(2, len(pts) - 2)
+            fork_start = pts[fork_idx]
+            fork_angle = ba + rng.uniform(-1.0, 1.0)
+            fork_len = int(r_outer * rng.uniform(0.1, 0.25))
+            fork_pts = [fork_start]
+            for fs in range(rng.randint(2, 3)):
+                ft = (fs + 1) / 3
+                fr = fork_len * ft
+                fj = rng.uniform(-4, 4) * SS
+                fx = int(fork_start[0] + fr * math.cos(fork_angle) + fj * math.cos(fork_angle + 1.57))
+                fy = int(fork_start[1] + fr * math.sin(fork_angle) + fj * math.sin(fork_angle + 1.57))
+                fork_pts.append((fx, fy))
+            d.line(fork_pts, fill=_c(color, 140), width=SS, joint="curve")
+
+    # Center dot
+    cr = 4 * SS
+    d.ellipse([cx - cr, cy - cr, cx + cr, cy + cr], fill=_c(color, 220))
+    cr2 = 2 * SS
+    d.ellipse([cx - cr2, cy - cr2, cx + cr2, cy + cr2], fill=_c(color, 255))
+
+    return img.resize((w, h), Image.LANCZOS)
+
+
 def glow(img, radius=4, intensity=0.6):
     """Add glow behind bright pixels."""
     blur = img.filter(ImageFilter.GaussianBlur(radius=radius))
@@ -458,7 +549,6 @@ def gen_dashboard():
     alerts_orig = os.path.join(ASSETS_DIR, "dashboard", "alerts_original.png")
     if os.path.exists(alerts_orig):
         icon = Image.open(alerts_orig).convert("RGBA")
-        # Crop to content, scale to 90% of 64x64 (10% padding)
         bbox = icon.getbbox()
         if bbox:
             icon = icon.crop(bbox)
@@ -1551,12 +1641,70 @@ def gen_backgrounds():
     rrect(d, (140, 80, 340, 142), fill=PANEL, outline=DARK_GRAY, radius=3)
     save(ss_finish(img, W, H), "buttons_locked.png")
 
-    # QR screens — default blue edge glow
-    for name in ["help_qr", "license_qr", "virt_qr"]:
-        base = framed()
-        base_d = ImageDraw.Draw(base)
-        base_d.rounded_rectangle([160, 28, 420, 194], radius=4, fill=_c(WHITE))
-        save(base, f"{name}.png")
+    # QR screens — real QR codes with PCARS styling
+    _qr_screens = [
+        ("help_qr", "https://hak5.org/pager-docs",
+         ["Scan to open", "documentation"], "hak5.org/pager-docs", None),
+        ("license_qr", "https://hak5.org/pager-license",
+         ["Scan to view", "full license"], "hak5.org/pager-license",
+         ["Access on device at", "/etc/LICENSES"]),
+        ("virt_qr", "http://172.16.52.1:1471",
+         ["Scan to open", "browser"], "http://172.16.52.1:1471",
+         ["Your device must be", "connected via USB-C", "or Management AP"]),
+    ]
+    try:
+        import subprocess, tempfile
+        for qr_name, qr_url, title, url_text, extra in _qr_screens:
+            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+                subprocess.run(["qr", qr_url], stdout=tmp, check=True)
+                tmp_path = tmp.name
+            qr_raw = Image.open(tmp_path).convert("L")
+            qr_sz = 160
+            qr_raw = qr_raw.resize((qr_sz, qr_sz), Image.NEAREST)
+
+            screen = Image.new("RGB", (W, H), BG)
+            sd = ImageDraw.Draw(screen)
+            sd.rectangle([0, 0, W, 3], fill=EDGE)
+            sd.rectangle([0, H - 3, W, H], fill=FRAME_D)
+
+            # QR code — white modules on dark bg
+            qr_rgb = Image.new("RGB", (qr_sz, qr_sz), BG)
+            qr_px = qr_raw.load()
+            qr_rgb_px = qr_rgb.load()
+            for qy in range(qr_sz):
+                for qx in range(qr_sz):
+                    qr_rgb_px[qx, qy] = WHITE if qr_px[qx, qy] < 128 else BG
+            qr_x, qr_y = 20, (H - qr_sz) // 2 + 5
+            screen.paste(qr_rgb, (qr_x, qr_y))
+            sd.rectangle([qr_x - 2, qr_y - 2, qr_x + qr_sz + 1, qr_y + qr_sz + 1],
+                         outline=DARK_GRAY)
+
+            font_lg = ImageFont.truetype(
+                "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", 18)
+            font_md = ImageFont.truetype(
+                "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 13)
+            font_sm = ImageFont.truetype(
+                "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 11)
+            tx, ty = 200, 30
+            for line in title:
+                sd.text((tx, ty), line, fill=WHITE, font=font_lg)
+                ty += 26
+            ty += 15
+            sd.text((tx, ty), url_text, fill=SEC_SETTINGS, font=font_md)
+            if extra:
+                ty += 25
+                for line in extra:
+                    sd.text((tx, ty), line, fill=DARK_GRAY, font=font_sm)
+                    ty += 16
+            screen.save(os.path.join(ASSETS_DIR, f"{qr_name}.png"))
+            os.unlink(tmp_path)
+    except Exception as e:
+        # Fallback if qr CLI not available
+        for qr_name, *_ in _qr_screens:
+            base = framed()
+            base_d = ImageDraw.Draw(base)
+            base_d.rounded_rectangle([160, 28, 420, 194], radius=4, fill=_c(WHITE))
+            save(base, f"{qr_name}.png")
 
     # Warning screens
     for name, accent in [("warn_device_too_hot", RED), ("warn_device_dimming_screen", YELLOW)]:
@@ -1824,62 +1972,12 @@ def gen_misc():
     d.polygon([(2*s, 9*s), (16*s, 2*s), (16*s, 16*s)], fill=_c(SOFT_W))
     save(ss_finish(img, 20, 18), "payloads_dashboard/arrow.png")
 
-    # Launch animation frames — plasma ball (same size both frames)
-    import math as _math
-    import random as _rand
+    # Launch animation frames — organic plasma ball, 4 frames cycling
     PLASMA_GREEN = (0, 220, 80)
-    PLASMA_GREEN_DIM = (0, 160, 50)
-    for fi, name in enumerate(["animation/anim_frame_1", "animation/anim_frame_2"]):
-        w, h = 113, 106  # fixed size — no shrinking between frames
-        img, d = ss_start(w, h)
-        cx, cy = w * s // 2, h * s // 2
-        r_outer = min(w, h) * s // 2 - 4 * s
-
-        # Outer ring — green
-        d.ellipse([cx - r_outer, cy - r_outer, cx + r_outer, cy + r_outer],
-                  outline=_c(PLASMA_GREEN, 200), width=2 * s)
-        # Inner glow ring
-        r_glow = r_outer - 3 * s
-        d.ellipse([cx - r_glow, cy - r_glow, cx + r_glow, cy + r_glow],
-                  outline=_c(PLASMA_GREEN, 40), width=2 * s)
-
-        # 6 lightning bolts — plasma ball style, shift angles per frame
-        rng = _rand.Random(77 + fi * 31)
-        bolt_base_angles = [0, 60, 120, 180, 240, 300]
-        for bi, base_deg in enumerate(bolt_base_angles):
-            # Each bolt gets a random offset per frame so they "move"
-            angle_deg = base_deg + rng.uniform(-25, 25)
-            ba = _math.radians(angle_deg)
-
-            # Bolt goes from near center to near edge
-            r_start = int(r_outer * 0.08)
-            r_end = int(r_outer * 0.85)
-
-            # 3-segment zigzag bolt
-            pts = []
-            for seg in range(4):
-                t = seg / 3.0
-                r_at = r_start + (r_end - r_start) * t
-                # Jitter perpendicular to the bolt direction
-                jitter = 0 if seg == 0 or seg == 3 else rng.uniform(-8, 8) * s
-                bx = int(cx + r_at * _math.cos(ba) + jitter * _math.cos(ba + 1.57))
-                by = int(cy + r_at * _math.sin(ba) + jitter * _math.sin(ba + 1.57))
-                pts.append((bx, by))
-
-            # Draw bolt with glow
-            d.line(pts, fill=_c(PLASMA_GREEN, 220), width=2 * s, joint="curve")
-            # Bright core line
-            d.line(pts, fill=_c((150, 255, 180), 140), width=1 * s, joint="curve")
-
-        # Center dot — bright green core
-        cr = 5 * s
-        d.ellipse([cx - cr, cy - cr, cx + cr, cy + cr],
-                  fill=_c(PLASMA_GREEN, 240))
-        cr2 = 2 * s
-        d.ellipse([cx - cr2, cy - cr2, cx + cr2, cy + cr2],
-                  fill=_c((200, 255, 220), 255))
-
-        result = ss_finish(img, w, h)
+    anim_seeds = [42, 77, 123, 256]
+    for fi, seed in enumerate(anim_seeds):
+        name = f"animation/anim_frame_{fi + 1}"
+        result = _draw_organic_plasma(113, 106, seed=seed, color=PLASMA_GREEN)
         save(result, f"launch_payload_dialog/{name}.png")
 
 

@@ -213,7 +213,7 @@
           "layers": [
             {
               "text": "Targeted Payload",
-              "text_color_palette": "white"
+              "text_color_palette": "recon_dim"
             }
           ],
           "selected_layers": [
@@ -232,7 +232,7 @@
           "layers": [
             {
               "text": "Add to Allow Filter",
-              "text_color_palette": "white"
+              "text_color_palette": "recon_dim"
             }
           ],
           "selected_layers": [
@@ -250,7 +250,7 @@
           "layers": [
             {
               "text": "Add to Deny Filter",
-              "text_color_palette": "white"
+              "text_color_palette": "recon_dim"
             }
           ],
           "selected_layers": [
@@ -268,7 +268,7 @@
           "layers": [
             {
               "text": "Deauth Client",
-              "text_color_palette": "white"
+              "text_color_palette": "recon_dim"
             }
           ],
           "selected_layers": [

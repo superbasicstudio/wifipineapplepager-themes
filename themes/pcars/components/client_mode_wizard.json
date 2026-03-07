@@ -47,7 +47,7 @@
             {
               "text": "Network Name",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -74,7 +74,7 @@
             {
               "text": "Encryption Type",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -101,7 +101,7 @@
             {
               "text": "Passphrase",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -128,7 +128,7 @@
             {
               "text": "Save",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
