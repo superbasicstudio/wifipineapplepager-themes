@@ -47,7 +47,7 @@
             {
               "text": "Network Name",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "pineap_dim"
             }
           ],
           "selected_layers": [
@@ -82,7 +82,7 @@
             {
               "text": "BSSID Override",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "pineap_dim"
             }
           ],
           "selected_layers": [
@@ -109,7 +109,7 @@
             {
               "text": "Encryption Type",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "pineap_dim"
             }
           ],
           "selected_layers": [
@@ -136,7 +136,7 @@
             {
               "text": "Passphrase",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "pineap_dim"
             }
           ],
           "selected_layers": [

@@ -38,7 +38,7 @@
             {
               "text": "UI Debug Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -78,7 +78,7 @@
             {
               "text": "Render Debug Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -107,7 +107,7 @@
             {
               "text": "Data Debug Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -136,7 +136,7 @@
             {
               "text": "Event Debug Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -165,7 +165,7 @@
             {
               "text": "Stats Debug Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -199,7 +199,7 @@
             {
               "text": "Isolated Error Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -228,7 +228,7 @@
             {
               "text": "Cache Debug Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -257,7 +257,7 @@
             {
               "text": "Service Debug Log",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -286,7 +286,7 @@
             {
               "text": "Background Changes",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -315,7 +315,7 @@
             {
               "text": "Trace ",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -353,7 +353,7 @@
             {
               "text": "Depth:",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -429,7 +429,7 @@
             {
               "text": "Write logs to disk",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -501,7 +501,7 @@
             {
               "text": "Restart Server",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -533,7 +533,7 @@
             {
               "text": "Restart PineAPd",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -565,7 +565,7 @@
             {
               "text": "Restart Networking",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [
@@ -597,7 +597,7 @@
             {
               "text": "Restart Device",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "settings_dim"
             }
           ],
           "selected_layers": [

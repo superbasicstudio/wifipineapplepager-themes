@@ -35,7 +35,7 @@
             {
               "text": "6Ghz",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "recon_dim"
             }
           ],
           "selected_layers": [
@@ -64,7 +64,7 @@
             {
               "text": "5Ghz",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "recon_dim"
             }
           ],
           "selected_layers": [
@@ -93,7 +93,7 @@
             {
               "text": "2.4Ghz",
               "x": 40,
-              "text_color_palette": "white"
+              "text_color_palette": "recon_dim"
             }
           ],
           "selected_layers": [

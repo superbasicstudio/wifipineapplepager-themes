@@ -114,7 +114,7 @@
                 "variable_name": "$_RECON_RESULT_SSID",
                 "string_template": {
                   "text_size": "medium",
-                  "text_color_palette": "white"
+                  "text_color_palette": "recon_dim"
                 }
               },
               {
@@ -270,7 +270,7 @@
                 "variable_name": "$_RECON_RESULT_SSID",
                 "string_template": {
                   "text_size": "medium",
-                  "text_color_palette": "white"
+                  "text_color_palette": "recon_dim"
                 }
               },
               {
@@ -426,7 +426,7 @@
                 "variable_name": "$_RECON_RESULT_SSID",
                 "string_template": {
                   "text_size": "medium",
-                  "text_color_palette": "white"
+                  "text_color_palette": "recon_dim"
                 }
               },
               {
@@ -582,7 +582,7 @@
                 "variable_name": "$_RECON_RESULT_SSID",
                 "string_template": {
                   "text_size": "medium",
-                  "text_color_palette": "white"
+                  "text_color_palette": "recon_dim"
                 }
               },
               {
@@ -738,7 +738,7 @@
                 "variable_name": "$_RECON_RESULT_SSID",
                 "string_template": {
                   "text_size": "medium",
-                  "text_color_palette": "white"
+                  "text_color_palette": "recon_dim"
                 }
               },
               {
