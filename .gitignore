@@ -7,3 +7,7 @@ themes/radar/assets/launch_payload_dialog/.DS_Store
 themes/radar/components/.DS_Store
 __pycache__/
 *.pyc
+
+# Claude Anchor framework — tracked in Gitea only, not in GitHub/Hak5 PRs
+CLAUDE.md
+_*.md
